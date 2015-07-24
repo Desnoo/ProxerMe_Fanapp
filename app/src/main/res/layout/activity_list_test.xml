@@ -1,5 +1,5 @@
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:id="@+id/fragment"
-    android:name="www.luneyco.com.proxertestapp.fragment.MainActivityFragment"
-    tools:layout="@layout/fragment_main" android:layout_width="match_parent"
+    android:name="www.luneyco.com.proxertestapp.List_testFragment"
+    tools:layout="@layout/fragment_list_test" android:layout_width="match_parent"
     android:layout_height="match_parent" />

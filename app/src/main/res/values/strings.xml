@@ -2,4 +2,6 @@
     <string name="app_name">Proxer Testapp</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_list_test">List_test</string>
+    <string name="title_activity_news">NewsActivity</string>
 </resources>
