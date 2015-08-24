@@ -23,17 +23,21 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import www.luneyco.com.proxertestapp.R;
 import www.luneyco.com.proxertestapp.activity.NewsActivity;
+import www.luneyco.com.proxertestapp.middleware.network.modelparser.INotificationResponseParserListener;
+import www.luneyco.com.proxertestapp.middleware.network.modelparser.NotificationResponseParser;
+import www.luneyco.com.proxertestapp.model.Notification;
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends Fragment implements INotificationResponseParserListener {
 
     private Button mLoginButton;
     private Button mShowNotificationsButton;
@@ -46,6 +50,7 @@ public class MainActivityFragment extends Fragment {
     private EditText mPassword;
 
     private Context mContext;
+
 
     public MainActivityFragment() {
     }
@@ -92,47 +97,8 @@ public class MainActivityFragment extends Fragment {
         mShowNotificationsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RequestQueue queue = Volley.newRequestQueue(v.getContext());
-                String url = "https://proxer.me/notifications?format=raw&s=count";
-
-                StringRequest stringRequest = new StringRequest
-                        (Request.Method.GET, url, new Response.Listener<String>() {
-
-                            @Override
-                            public void onResponse(String _Response) {
-                                String out = "[Notification] Out: \n";
-                                if (_Response.contains("#")) {
-                                    // when we have a hashtag all is fine
-                                    String[] vals = _Response.split("#");
-                                    int[] values = new int[vals.length];
-                                    for (int index = 0; index < vals.length; ++ index) {
-                                        try {
-                                            values[index] = Integer.parseInt(vals[index]);
-                                        } catch (NumberFormatException e) {
-                                            mDebugTextView.setText(out + " Invalid sign in response! Maybe Api changed!?");
-                                            return;
-                                        }
-                                    }
-
-                                    if (values[0] == 0) {
-                                        out += "Pns: " + values[2] + "\nFreundschaftsanfragen: " + values[3] + "\nUngelesene News: " + values[4] + "\nSonstiger kram: " + values[5];
-                                    } else {
-                                        out += "Error. Some other Failure!";
-                                    }
-                                } else {
-                                    out += "Error. Log in and try again! \n";
-                                }
-                                mDebugTextView.setText(out);
-
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                mDebugTextView.setText("[Notification]Error: " + error.getMessage());
-                            }
-                        });
-                queue.add(stringRequest);
-
+                NotificationResponseParser notificationResponseParser = new NotificationResponseParser(MainActivityFragment.this, mContext);
+                notificationResponseParser.DoRequest();
             }
         });
 
@@ -206,5 +172,10 @@ public class MainActivityFragment extends Fragment {
         super.onPause();
         mShowNotificationsButton.setOnClickListener(null);
         mLoginButton.setOnClickListener(null);
+    }
+
+    @Override
+    public void onResponse(Notification _Notification) {
+        mDebugTextView.setText(_Notification.toString());
     }
 }
