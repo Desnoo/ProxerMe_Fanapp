@@ -1,8 +1,8 @@
 package www.luneyco.com.proxertestapp.fragment;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,33 +10,28 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import www.luneyco.com.proxertestapp.R;
 import www.luneyco.com.proxertestapp.adapter.NewsListAdapter;
+import www.luneyco.com.proxertestapp.middleware.network.modelparser.IListResponse;
+import www.luneyco.com.proxertestapp.middleware.network.modelparser.NewsResponseParser;
+import www.luneyco.com.proxertestapp.model.News;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class NewsActivityFragment extends Fragment {
+public class NewsActivityFragment extends Fragment implements IListResponse<News> {
 
     private Context mContext;
     private ListView mListView;
     private NewsListAdapter mListAdapter;
+
+    private NewsResponseParser m_NewsResponseParser;
 
     public NewsActivityFragment() {
     }
@@ -45,6 +40,7 @@ public class NewsActivityFragment extends Fragment {
     public void onAttach(Activity _Activity) {
         super.onAttach(_Activity);
         mContext = _Activity;
+        m_NewsResponseParser = new NewsResponseParser(this, mContext);
     }
 
     @Override
@@ -60,7 +56,7 @@ public class NewsActivityFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mListAdapter = new NewsListAdapter(mContext, android.R.layout.simple_list_item_1, new ArrayList<String>());
+        mListAdapter = new NewsListAdapter(getActivity(),mContext, R.layout.list_adapter_news_preview, new ArrayList<News>());
     }
 
     @Override
@@ -69,58 +65,18 @@ public class NewsActivityFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(mContext);
         int page = 1;
         String url = "http://proxer.me/notifications?format=json&s=news&p=" + String.valueOf(page);
+        m_NewsResponseParser.DoRequest(1);
+    }
 
-        StringRequest stringRequest = new StringRequest
-                (Request.Method.GET, url, new Response.Listener<String>() {
+    @Override
+    public void onResponse(List<News> _Ret) {
+        for(News news : _Ret){
+            mListAdapter.add(news);
+        }
+    }
 
-                    @Override
-                    public void onResponse(String _Response) {
-
-                        try {
-                            _Response.replaceAll(".*\".*", "\\\"");
-                            JSONObject response = new JSONObject(_Response);
-                            String out = "";
-
-                            switch (response.getInt("error")){
-                                case 0:
-
-                                    JSONArray array = response.getJSONArray("notifications");
-                                    String[] stringOut = new String[array.length()];
-                                    for(int Index = 0; Index < array.length(); ++ Index){
-                                        JSONObject obj = array.getJSONObject(Index);
-                                        mListAdapter.add(obj.getString("nid"));
-                                        //stringOut[Index] = obj.getString("nid");
-                                    }
-                                    break;
-
-                                case 1:
-                                    switch (Integer.valueOf(response.getString("code"))) {
-                                        case 0:
-                                        case 1:
-                                        case 2:
-                                        default:
-                                            out += "Error " + response.getString("code") + ": " + response.getString("message");
-                                            Toast.makeText(mContext, out, Toast.LENGTH_LONG).show();
-
-                                            break;
-                                    }
-                                    break;
-
-                                default:
-                                    break;
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                }, new Response.ErrorListener(){
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(mContext, "Fail", Toast.LENGTH_LONG).show();
-                    }
-                });
-        queue.add(stringRequest);
+    @Override
+    public void onErrorResponse() {
+        Toast.makeText(mContext, "News konnten nicht aktualisiert werden", Toast.LENGTH_LONG).show();
     }
 }

@@ -12,6 +12,10 @@ public class User {
 
     //region Getter and Setter
 
+    public void setmId(int mId) {
+        this.mId = mId;
+    }
+
     public int getmId() {
         return mId;
     }
@@ -31,7 +35,7 @@ public class User {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof User)) return false;
+        if (! (o instanceof User)) return false;
 
         User user = (User) o;
 

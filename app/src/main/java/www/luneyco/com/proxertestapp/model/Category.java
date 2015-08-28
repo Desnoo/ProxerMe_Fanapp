@@ -19,6 +19,10 @@ public class Category {
         this.mCategoryName = mCategoryName;
     }
 
+    public void setmId(int mId) {
+        this.mId = mId;
+    }
+
     public int getmId() {
         return mId;
     }

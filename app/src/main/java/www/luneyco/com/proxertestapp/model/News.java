@@ -15,7 +15,7 @@ public class News {
 
     private String mDescription;
 
-    private long mImageId;
+    private String mImageId;
 
     private long mThreadId;
 
@@ -29,6 +29,10 @@ public class News {
 
 
     //region Getter and Setter
+
+    public void setmId(int mId) {
+        this.mId = mId;
+    }
 
     public int getmId() {
         return mId;
@@ -58,11 +62,11 @@ public class News {
         this.mDescription = mDescription;
     }
 
-    public long getmImageId() {
+    public String getmImageId() {
         return mImageId;
     }
 
-    public void setmImageId(long mImageId) {
+    public void setmImageId(String mImageId) {
         this.mImageId = mImageId;
     }
 
@@ -123,6 +127,22 @@ public class News {
     @Override
     public int hashCode() {
         return getmId();
+    }
+
+    @Override
+    public String toString() {
+        return "News{" +
+                "mId=" + mId +
+                ", mCreationTimeStamp=" + mCreationTimeStamp +
+                ", mTitle='" + mTitle + '\'' +
+                ", mDescription='" + mDescription + '\'' +
+                ", mImageId=" + mImageId +
+                ", mThreadId=" + mThreadId +
+                ", mHits=" + mHits +
+                ", mNumberOfPosts=" + mNumberOfPosts +
+                ", mCategory=" + mCategory +
+                ", mCreator=" + mCreator +
+                '}';
     }
 
     //endregion

@@ -18,13 +18,14 @@ public class StringRequest extends Request<String> {
 
     /**
      * Construct this request to get an String response.
-     * @param _Method
-     * @param _Url
-     * @param _Listener
-     * @param _ErrorListener
+     * @param _Method the request method.
+     * @param _Url the request url.
+     * @param _Listener the listener that gets the response.
+     * @param _ErrorListener the listener for an error.
      */
     public StringRequest(int _Method, String _Url, Response.Listener<String> _Listener, Response.ErrorListener _ErrorListener) {
         super(_Method, _Url, _ErrorListener);
+        m_Listener = _Listener;
     }
 
     @Override
