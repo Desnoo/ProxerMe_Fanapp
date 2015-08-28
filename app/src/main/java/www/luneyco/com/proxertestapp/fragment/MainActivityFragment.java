@@ -54,6 +54,11 @@ public class MainActivityFragment extends Fragment implements INotificationRespo
     public MainActivityFragment() {
     }
 
+    public static Fragment newInstance(){
+        Fragment fragment = new MainActivityFragment();
+        return fragment;
+    }
+
     @Override
     public void onAttach(Activity _Activity) {
         super.onAttach(_Activity);

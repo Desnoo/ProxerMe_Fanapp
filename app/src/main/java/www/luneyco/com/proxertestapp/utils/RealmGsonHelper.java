@@ -1,4 +1,4 @@
-package www.luneyco.com.proxertestapp.model.serializer;
+package www.luneyco.com.proxertestapp.utils;
 
 import android.util.Log;
 
@@ -11,6 +11,9 @@ import io.realm.RealmObject;
 import www.luneyco.com.proxertestapp.model.Category;
 import www.luneyco.com.proxertestapp.model.News;
 import www.luneyco.com.proxertestapp.model.User;
+import www.luneyco.com.proxertestapp.model.serializer.CategorySerializer;
+import www.luneyco.com.proxertestapp.model.serializer.NewsSerializer;
+import www.luneyco.com.proxertestapp.model.serializer.UserSerializer;
 
 /**
  * The gson helper to prevent any failures that can occure between gson and realm.io.
@@ -49,14 +52,14 @@ public class RealmGsonHelper {
         // Register Type Adapters for serializing RealmObjects when accessed indirectly.
         // Realm proxy objects are registered for when you want to serialize an unmanaged RealmList,
         // and ArrayList of RealmObjects or a newly instantiated RealmObject, for example.
-        /*try {
+        try {
             gsonBuilder.registerTypeAdapter(Class.forName("io.realm.CategoryRealmProxy"), new CategorySerializer())
                     .registerTypeAdapter(Class.forName("io.realm.NewsRealmProxy"), new NewsSerializer())
                     .registerTypeAdapter(Class.forName("io.realm.UserRealmProxy"), new UserSerializer());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             Log.e(LOG_TAG, "The proxy class of a model was not found!");
-        }*/
+        }
 
         return gsonBuilder.create();
     }

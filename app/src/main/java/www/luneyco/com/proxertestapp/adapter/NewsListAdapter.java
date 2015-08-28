@@ -1,6 +1,5 @@
 package www.luneyco.com.proxertestapp.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,9 +14,10 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import www.luneyco.com.proxertestapp.R;
+import www.luneyco.com.proxertestapp.events.FragmentChangeEvent;
 import www.luneyco.com.proxertestapp.fragment.NewsDetailFragment;
 import www.luneyco.com.proxertestapp.model.News;
-import www.luneyco.com.proxertestapp.utils.FragmentManager;
+import www.luneyco.com.proxertestapp.utils.provider.BusProvider;
 import www.luneyco.com.proxertestapp.utils.NetworkUtils;
 
 /**
@@ -28,14 +28,12 @@ public class NewsListAdapter extends ArrayAdapter<News> {
 
     private static final String LOG_TAG = NewsListAdapter.class.getName();
     private Context  m_Context;
-    private Activity m_Activity;
     private int      m_LayoutId;
 
-    public NewsListAdapter(Activity _Activity, Context context, int resource, ArrayList<News> objects) {
+    public NewsListAdapter(Context context, int resource, ArrayList<News> objects) {
         super(context, resource, objects);
         m_LayoutId = resource;
         m_Context = context;
-        m_Activity = _Activity;
     }
 
     @Override
@@ -54,7 +52,7 @@ public class NewsListAdapter extends ArrayAdapter<News> {
         String imageUrl    = NetworkUtils.getNewsImageUrl(currentNews.getmId(), currentNews.getmImageId());
 
         newsTitle.setText(currentNews.getmTitle());
-        Log.i(LOG_TAG, currentNews.toString());
+       // Log.i(LOG_TAG, currentNews.toString());
         //textDescription.setText(currentNews.getmDescription());
         Picasso.with(m_Context)
                 .load(imageUrl)
@@ -63,7 +61,7 @@ public class NewsListAdapter extends ArrayAdapter<News> {
                 .error(R.mipmap.no_image)
                 .into(image);
 
-        _ConvertView.setOnClickListener(new OnClickListenerNews(NetworkUtils
+        _ConvertView.setOnClickListener(new OnClickListener(NetworkUtils
                         .getNewsUrl(currentNews.getmCategory().getmId(), currentNews.getmThreadId()))
         );
 
@@ -79,18 +77,18 @@ public class NewsListAdapter extends ArrayAdapter<News> {
     /**
      * On click listener when news entry was pressed.
      */
-    private class OnClickListenerNews implements View.OnClickListener {
+    private class OnClickListener implements View.OnClickListener {
 
         private String m_Url;
 
-        public OnClickListenerNews(String _Url) {
+        public OnClickListener(String _Url) {
             m_Url = _Url;
         }
 
+
         @Override
         public void onClick(View v) {
-
-            FragmentManager.changeFragment(m_Activity, NewsDetailFragment.newInstance(m_Url));
+           BusProvider.getInstance().post(new FragmentChangeEvent(NewsDetailFragment.newInstance(m_Url)));
         }
     }
 

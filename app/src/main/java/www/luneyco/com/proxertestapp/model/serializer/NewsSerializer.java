@@ -14,6 +14,7 @@ import java.lang.reflect.Type;
 import www.luneyco.com.proxertestapp.model.Category;
 import www.luneyco.com.proxertestapp.model.News;
 import www.luneyco.com.proxertestapp.model.User;
+import www.luneyco.com.proxertestapp.utils.RealmGsonHelper;
 
 /**
  * Serializer for news.

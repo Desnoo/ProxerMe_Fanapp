@@ -1,7 +1,7 @@
 package www.luneyco.com.proxertestapp.activity;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -11,17 +11,21 @@ import java.net.CookiePolicy;
 
 import www.luneyco.com.proxertestapp.PersistentCookieStore;
 import www.luneyco.com.proxertestapp.R;
+import www.luneyco.com.proxertestapp.fragment.MainActivityFragment;
+import www.luneyco.com.proxertestapp.utils.FragmentManager;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_base);
 
         CookieManager cookieManager = new CookieManager(new PersistentCookieStore(this), CookiePolicy.ACCEPT_ORIGINAL_SERVER);
         CookieHandler.setDefault(cookieManager);
+
+        FragmentManager.replaceFragment(this, MainActivityFragment.newInstance());
     }
 
 

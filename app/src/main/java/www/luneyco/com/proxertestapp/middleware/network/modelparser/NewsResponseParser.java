@@ -15,9 +15,11 @@ import com.google.gson.JsonParser;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 import www.luneyco.com.proxertestapp.config.NetworkRequestUrls;
 import www.luneyco.com.proxertestapp.model.News;
-import www.luneyco.com.proxertestapp.model.serializer.RealmGsonHelper;
+import www.luneyco.com.proxertestapp.utils.RealmGsonHelper;
 import www.luneyco.com.proxertestapp.request.general.StringRequest;
 
 /**
@@ -71,6 +73,7 @@ public class NewsResponseParser implements Response.ErrorListener, Response.List
         for(JsonElement jsonElement : jsonArray) {
             news.add(gson.fromJson(jsonElement, News.class));
         }
+
         m_Listener.onResponse(news);
         // TODO: load some images?
     }

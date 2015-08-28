@@ -1,11 +1,15 @@
 package www.luneyco.com.proxertestapp.model;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * The User model to hold user data.
  * Created by tinos_000 on 24.07.2015.
  */
-public class User {
+public class User extends RealmObject{
 
+    @PrimaryKey
     private int mId;
 
     private String mCreatorName;
@@ -31,22 +35,6 @@ public class User {
     //endregion
 
     //region equals and hashCode
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (! (o instanceof User)) return false;
-
-        User user = (User) o;
-
-        return getmId() == user.getmId();
-
-    }
-
-    @Override
-    public int hashCode() {
-        return getmId();
-    }
 
     //endregion
 }

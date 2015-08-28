@@ -1,11 +1,15 @@
 package www.luneyco.com.proxertestapp.model;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * News model to hold the news data.
  * Created by tinos_000 on 24.07.2015.
  */
-public class News {
+public class News extends RealmObject {
 
+    @PrimaryKey
     private int mId;
 
     // Unix Timestamp
@@ -113,37 +117,7 @@ public class News {
 
     //region equals and hashCode
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof News)) return false;
 
-        News news = (News) o;
-
-        return getmId() == news.getmId();
-
-    }
-
-    @Override
-    public int hashCode() {
-        return getmId();
-    }
-
-    @Override
-    public String toString() {
-        return "News{" +
-                "mId=" + mId +
-                ", mCreationTimeStamp=" + mCreationTimeStamp +
-                ", mTitle='" + mTitle + '\'' +
-                ", mDescription='" + mDescription + '\'' +
-                ", mImageId=" + mImageId +
-                ", mThreadId=" + mThreadId +
-                ", mHits=" + mHits +
-                ", mNumberOfPosts=" + mNumberOfPosts +
-                ", mCategory=" + mCategory +
-                ", mCreator=" + mCreator +
-                '}';
-    }
 
     //endregion
 }
