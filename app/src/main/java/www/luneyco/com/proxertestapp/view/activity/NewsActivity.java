@@ -1,4 +1,4 @@
-package www.luneyco.com.proxertestapp.activity;
+package www.luneyco.com.proxertestapp.view.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +9,7 @@ import com.squareup.otto.Subscribe;
 
 import www.luneyco.com.proxertestapp.R;
 import www.luneyco.com.proxertestapp.events.FragmentChangeEvent;
-import www.luneyco.com.proxertestapp.fragment.NewsActivityFragment;
+import www.luneyco.com.proxertestapp.view.fragment.NewsActivityFragment;
 import www.luneyco.com.proxertestapp.utils.provider.BusProvider;
 import www.luneyco.com.proxertestapp.utils.FragmentManager;
 
@@ -23,7 +23,7 @@ public class NewsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
-        FragmentManager.replaceFragment(this, NewsActivityFragment.newInstance());
+        FragmentManager.replaceFragment(this, NewsActivityFragment.newInstance(), true);
     }
 
 
@@ -68,7 +68,7 @@ public class NewsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(getFragmentManager().getBackStackEntryCount() > 1){
+        if (getFragmentManager().getBackStackEntryCount() > 1) {
             getFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
@@ -76,8 +76,9 @@ public class NewsActivity extends AppCompatActivity {
     }
 
     //#region Event listener
-    @Subscribe public void changeFragment(FragmentChangeEvent _Event){
-        FragmentManager.replaceFragment(this, _Event.getFragment());
+    @Subscribe
+    public void changeFragment(FragmentChangeEvent _Event) {
+        FragmentManager.replaceFragment(this, _Event.getFragment(), true);
     }
     //#endregion
 }

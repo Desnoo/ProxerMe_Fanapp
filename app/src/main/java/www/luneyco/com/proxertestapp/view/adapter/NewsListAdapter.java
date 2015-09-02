@@ -1,7 +1,6 @@
-package www.luneyco.com.proxertestapp.adapter;
+package www.luneyco.com.proxertestapp.view.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,8 @@ import java.util.ArrayList;
 
 import www.luneyco.com.proxertestapp.R;
 import www.luneyco.com.proxertestapp.events.FragmentChangeEvent;
-import www.luneyco.com.proxertestapp.fragment.NewsDetailFragment;
+import www.luneyco.com.proxertestapp.events.LoadNewsFromWebEvent;
+import www.luneyco.com.proxertestapp.view.fragment.NewsDetailFragment;
 import www.luneyco.com.proxertestapp.model.News;
 import www.luneyco.com.proxertestapp.utils.provider.BusProvider;
 import www.luneyco.com.proxertestapp.utils.NetworkUtils;
@@ -65,8 +65,14 @@ public class NewsListAdapter extends ArrayAdapter<News> {
                         .getNewsUrl(currentNews.getmCategory().getmId(), currentNews.getmThreadId()))
         );
 
+        // check if we need to reload some more data
+        if(_Position >= getCount() - 1){
+            // event to load some more data
+            BusProvider.getInstance().post(new LoadNewsFromWebEvent(currentNews.getmId() - 1));
+        }
+
         return _ConvertView;
-    }
+}
 
     @Override
     public void add(News object) {

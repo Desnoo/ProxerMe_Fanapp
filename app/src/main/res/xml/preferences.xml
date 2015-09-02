@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="prefKeyNotificationSettings"
+        android:title="@string/notifications"
+        android:disableDependentsState="true"
+        >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="prefKeyNotificationNews"
+            android:summary="@string/notificationNewsDesc"
+            android:title="@string/notificationNews"
+            />
+        <RingtonePreference
+            android:key="prefKeyNotificationAudio"
+            android:ringtoneType="notification"
+            android:showDefault="true"
+            android:title="@string/notificationAudio"
+            android:dependency="prefKeyNotificationNews"
+            />
+        <www.luneyco.com.proxertestapp.view.preferences.NumberPickerPreference
+            android:defaultValue="60"
+            android:key="prefKeyNotificationCheckRate"
+            android:summary="@string/refreshRateDesc"
+            android:title="@string/refreshRate"
+            android:dependency="prefKeyNotificationNews"
+            />
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -4,4 +4,10 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_list_test">List_test</string>
     <string name="title_activity_news">NewsActivity</string>
+    <string name="notificationNews">Benachrichtigung bei neuer News</string>
+    <string name="notificationNewsDesc">Wenn aktiviert bekommst du immer eine Benachrichtigung bei neuen News.</string>
+    <string name="notifications">Benachrichtigungen</string>
+    <string name="notificationAudio">Benachrichtigungston</string>
+    <string name="refreshRate">Aktualisierungsrate</string>
+    <string name="refreshRateDesc">Alle wieviel Minuten soll nach neuen Benachrichtigungen gesucht werden.</string>
 </resources>

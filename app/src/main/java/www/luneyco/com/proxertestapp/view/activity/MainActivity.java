@@ -1,6 +1,8 @@
-package www.luneyco.com.proxertestapp.activity;
+package www.luneyco.com.proxertestapp.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,21 +13,22 @@ import java.net.CookiePolicy;
 
 import www.luneyco.com.proxertestapp.PersistentCookieStore;
 import www.luneyco.com.proxertestapp.R;
-import www.luneyco.com.proxertestapp.fragment.MainActivityFragment;
+import www.luneyco.com.proxertestapp.config.Preferences;
+import www.luneyco.com.proxertestapp.view.fragment.MainActivityFragment;
+import www.luneyco.com.proxertestapp.utils.AlertHelper;
 import www.luneyco.com.proxertestapp.utils.FragmentManager;
+import www.luneyco.com.proxertestapp.view.service.NotificationService;
 
 
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
+        FragmentManager.replaceFragment(this, MainActivityFragment.newInstance(), true);
 
-        CookieManager cookieManager = new CookieManager(new PersistentCookieStore(this), CookiePolicy.ACCEPT_ORIGINAL_SERVER);
-        CookieHandler.setDefault(cookieManager);
-
-        FragmentManager.replaceFragment(this, MainActivityFragment.newInstance());
     }
 
 
@@ -45,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent newIntent = new Intent(this, PreferencesActivity.class);
+            startActivity(newIntent);
             return true;
         }
 

@@ -7,6 +7,7 @@ package www.luneyco.com.proxertestapp.config;
  */
 public final class NetworkRequestUrls {
     public static final String NotificationRequestUrl = "https://proxer.me/notifications?format=raw&s=count";
+    public static final String LoginRequestUrl = "https://proxer.me/login?format=json&action=login";
 
     public final class NewsRequest {
         public static final String NewsRequestPageNum = "{{?page}}";
@@ -15,6 +16,7 @@ public final class NetworkRequestUrls {
         // fields used for json parsing!
         public static final String Error         = "error";
         public static final String Notifications = "notifications";
+
 
         public final class ImageRequest {
             public static final String NewsIdHolder      = "{{nid}}";

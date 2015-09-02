@@ -1,4 +1,4 @@
-package www.luneyco.com.proxertestapp.fragment;
+package www.luneyco.com.proxertestapp.view.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -85,10 +85,12 @@ public class NewsDetailFragment extends Fragment implements Response.ErrorListen
     @Override
     public void onResponse(String response) {
         m_Document = Jsoup.parse(response);
-        m_Document.charset(Charset.forName("utf-8"));
+        m_Document.charset(Charset.forName("UTF-8"));
         String relevantHtml = m_Document.getElementsByClass("kmsgtext").outerHtml();
         m_Document.body().html(relevantHtml);
-        m_WebView.loadData(m_Document.outerHtml(), "text/html", "utf-8");
+        byte[] bytes = m_Document.outerHtml().getBytes(Charset.forName("UTF-8"));
+
+        m_WebView.loadData(new String(bytes, Charset.forName("UTF-8")), "text/html; charset=utf-8", "utf-8");
     }
 
     @Override
