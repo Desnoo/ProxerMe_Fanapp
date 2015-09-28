@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
@@ -31,6 +33,8 @@ import www.luneyco.com.proxertestapp.model.Notification;
  * A placeholder fragment containing a simple view.
  */
 public class NewsActivityFragment extends Fragment implements IListResponse<News>, INotificationResponseParserListener {
+
+    private static final long HOUR = 3600; // 60*60*1000
 
     private Context mContext;
     private ListView mListView;
@@ -76,17 +80,23 @@ public class NewsActivityFragment extends Fragment implements IListResponse<News
         RequestQueue queue = Volley.newRequestQueue(mContext);
         Realm realm = Realm.getInstance(mContext);
         RealmResults<News> news = realm.where(News.class).findAll();
-        for (News newsToInsert : news) {
-            mListAdapter.add(newsToInsert);
-        }
-        if (news.size() == 0) {
+
+        if (realm.where(News.class).count() > 0) {
+            long latestTimestamp = realm.where(News.class).maximumInt("news.mCreationTimeStamp");
+            int setRequestTime = 1; // TODO: Set as request val
+            // here we want to reduce the request rate
+            if(latestTimestamp + HOUR * setRequestTime < System.currentTimeMillis()){
+                m_NewsResponseParser.DoRequest(1);
+            }
+            for (News newsToInsert : news) {
+                mListAdapter.add(newsToInsert);
+            }
+        } else{
+            // fetch
             int page = 1;
             String url = "http://proxer.me/notifications?format=json&s=news&p=" + String.valueOf(page);
             m_NewsResponseParser.DoRequest(1);
-        } else {
-            new NotificationResponseParser(this, mContext);
         }
-
     }
 
     @Override
