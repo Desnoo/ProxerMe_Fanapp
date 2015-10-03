@@ -1,4 +1,4 @@
-package www.luneyco.com.proxertestapp.fragment;
+package www.luneyco.com.proxertestapp.view.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,13 +22,15 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import www.luneyco.com.proxertestapp.R;
-import www.luneyco.com.proxertestapp.adapter.NewsListAdapter;
+import www.luneyco.com.proxertestapp.view.adapter.NewsListAdapter;
+import www.luneyco.com.proxertestapp.events.LoadNewsFromWebEvent;
 import www.luneyco.com.proxertestapp.middleware.network.modelparser.IListResponse;
 import www.luneyco.com.proxertestapp.middleware.network.modelparser.INotificationResponseParserListener;
 import www.luneyco.com.proxertestapp.middleware.network.modelparser.NewsResponseParser;
 import www.luneyco.com.proxertestapp.middleware.network.modelparser.NotificationResponseParser;
 import www.luneyco.com.proxertestapp.model.News;
 import www.luneyco.com.proxertestapp.model.Notification;
+import www.luneyco.com.proxertestapp.utils.provider.BusProvider;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -76,7 +79,7 @@ public class NewsActivityFragment extends Fragment implements IListResponse<News
     @Override
     public void onResume() {
         super.onResume();
-
+        BusProvider.getInstance().register(this);
         RequestQueue queue = Volley.newRequestQueue(mContext);
         Realm realm = Realm.getInstance(mContext);
         RealmResults<News> news = realm.where(News.class).findAll();
@@ -97,17 +100,26 @@ public class NewsActivityFragment extends Fragment implements IListResponse<News
             String url = "http://proxer.me/notifications?format=json&s=news&p=" + String.valueOf(page);
             m_NewsResponseParser.DoRequest(1);
         }
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        BusProvider.getInstance().unregister(this);
     }
 
     @Override
     public void onResponse(List<News> _Ret) {
         Realm realm = Realm.getInstance(mContext);
-        long latestTimestamp = 0L;
+        int latestNewsId = 0;
+        int oldestNewsId =Integer.MAX_VALUE;
         if (realm.where(News.class).count() > 0) {
-            latestTimestamp = realm.where(News.class).maximumInt("news.mCreationTimeStamp");
+            latestNewsId = (int) realm.where(News.class).maximumInt("mId");
+            oldestNewsId = (int) realm.where(News.class).minimumInt("mId");
         }
         for (News news : _Ret) {
-            if (news.getmCreationTimeStamp() > latestTimestamp) {
+            if (news.getmId() > latestNewsId || news.getmId() < oldestNewsId) {
                 mListAdapter.add(news);
             }
         }
@@ -126,13 +138,25 @@ public class NewsActivityFragment extends Fragment implements IListResponse<News
     @Override
     public void onResponse(Notification _Notification) {
         if (!_Notification.isSuccessful()) {
-            Toast.makeText(mContext, "Keine Notifications erhalten!", Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, "Keine Notifications erhalten. Bitte einloggen!", Toast.LENGTH_LONG).show();
             return;
         }
         if (_Notification.getUnreadNews() > 0) {
-            int page = 1;
-            String url = "http://proxer.me/notifications?format=json&s=news&p=" + String.valueOf(page);
-            m_NewsResponseParser.DoRequest(1);
+            int pagesToUpdate = (int) Math.ceil((double) _Notification.getUnreadNews() / 15);
+            for(int page = 1; page <= pagesToUpdate; ++ page) {
+                m_NewsResponseParser.DoRequest(page);
+            }
+        }
+    }
+
+    @Subscribe
+    public void loadNewsFromWeb(LoadNewsFromWebEvent _Event){
+        Realm realm = Realm.getInstance(mContext);
+        if (realm.where(News.class).count() > 0) {
+            int latestNewsId = (int) realm.where(News.class).maximumInt("mId");
+            int page = (int)Math.ceil((double)((double)(latestNewsId - _Event.getNewsIdToLoad()) / (double)15));
+            m_NewsResponseParser.DoRequest(page);
+
         }
     }
 

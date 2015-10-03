@@ -1,5 +1,7 @@
 package www.luneyco.com.proxertestapp.request.general;
 
+import android.util.Log;
+
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
@@ -7,12 +9,16 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * String Request to get String response for a normal request.
  * created by ts on 14.08.2015.
  */
 public class StringRequest extends Request<String> {
+
+    private static final String LOG_TAG = StringRequest.class.getName();
 
     protected Response.Listener<String> m_Listener;
 
@@ -36,7 +42,8 @@ public class StringRequest extends Request<String> {
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse _Response) {
         try {
-            String response = new String(_Response.data, HttpHeaderParser.parseCharset(_Response.headers));
+            String response = new String(_Response.data, "UTF-8");
+            Log.d(LOG_TAG, response);
             return Response.success(response,HttpHeaderParser.parseCacheHeaders(_Response));
         } catch (UnsupportedEncodingException e) {
             return Response.error(new ParseError(e));
