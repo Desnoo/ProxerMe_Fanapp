@@ -10,18 +10,12 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import java.nio.charset.Charset;
-
 import www.luneyco.com.proxertestapp.R;
-import www.luneyco.com.proxertestapp.request.general.StringRequest;
 
 /**
  * Shows the news in detail in a webview.
@@ -63,6 +57,7 @@ public class NewsDetailFragment extends Fragment implements Response.ErrorListen
                              android.os.Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news_details, container, false);
         m_WebView = (WebView) view.findViewById(R.id.webView);
+        m_WebView.loadUrl(m_UrlToLoad);
         return view;
     }
 
@@ -70,9 +65,8 @@ public class NewsDetailFragment extends Fragment implements Response.ErrorListen
     public void onCreate(android.os.Bundle _SavedInstanceState) {
         super.onCreate(_SavedInstanceState);
         m_UrlToLoad = getArguments().getString(Bundle.NEWS_URL);
-
-        RequestQueue queue = Volley.newRequestQueue(mContext);
-        queue.add(new StringRequest(StringRequest.Method.GET, m_UrlToLoad, this, this));
+        //RequestQueue queue = Volley.newRequestQueue(mContext);
+        // queue.add(new StringRequest(StringRequest.Method.GET, m_UrlToLoad, this, this));
 
     }
 
@@ -84,13 +78,15 @@ public class NewsDetailFragment extends Fragment implements Response.ErrorListen
 
     @Override
     public void onResponse(String response) {
-        m_Document = Jsoup.parse(response);
+
+        // TODO: Do here some parsing to get a nice look and feel for the forum
+        /*m_Document = Jsoup.parse(response);
         m_Document.charset(Charset.forName("UTF-8"));
         String relevantHtml = m_Document.getElementsByClass("kmsgtext").outerHtml();
         m_Document.body().html(relevantHtml);
         byte[] bytes = m_Document.outerHtml().getBytes(Charset.forName("UTF-8"));
 
-        m_WebView.loadData(new String(bytes, Charset.forName("UTF-8")), "text/html; charset=utf-8", "utf-8");
+        m_WebView.loadData(new String(bytes, Charset.forName("UTF-8")), "text/html; charset=utf-8", "utf-8");*/
     }
 
     @Override

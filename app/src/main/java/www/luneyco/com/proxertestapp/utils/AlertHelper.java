@@ -18,6 +18,7 @@ public class AlertHelper {
     private AlarmManager m_AlarmManager;
     private PendingIntent m_PendingIntent;
 
+    private static int m_NewsAlarmRequestCode = 1;
 
     /**
      * Starts a new alarm that is triggered every _UpdateRate minutes.
@@ -26,19 +27,23 @@ public class AlertHelper {
      */
     public void startNewsAlarmManager(Context _Context, int _UpdateRate){
         stopNewsAlarmManager(_Context);
-        long updateRate = (long) _UpdateRate * 60L * 1000L;
+        long updateRate = _UpdateRate * 60L * 1000L;
         m_AlarmManager = (AlarmManager) _Context.getSystemService(Context.ALARM_SERVICE);
         Intent intent  = new Intent(_Context, NotificationService.class);
-        m_PendingIntent = PendingIntent.getService(_Context, 0, intent, 0);
+        m_PendingIntent = PendingIntent.getService(_Context, m_NewsAlarmRequestCode, intent, 0);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
 
-        m_AlarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, calendar.getTimeInMillis(), updateRate, m_PendingIntent);
+        m_AlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), updateRate, m_PendingIntent);
     }
 
     public void stopNewsAlarmManager(Context _Context){
-        if(m_AlarmManager != null){
-            m_AlarmManager.cancel(m_PendingIntent);
+        if(m_AlarmManager == null || m_PendingIntent == null){
+            Intent intent  = new Intent(_Context, NotificationService.class);
+            m_PendingIntent = PendingIntent.getService(_Context, m_NewsAlarmRequestCode, intent, 0);
+            m_AlarmManager = (AlarmManager) _Context.getSystemService(Context.ALARM_SERVICE);
         }
+        m_AlarmManager.cancel(m_PendingIntent);
+
     }
 }

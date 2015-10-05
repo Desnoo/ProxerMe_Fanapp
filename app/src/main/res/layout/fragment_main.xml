@@ -23,56 +23,56 @@
 
     <Button
         android:id="@+id/login_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/debugText"
-        android:layout_marginTop="140dp"
-        android:layout_toEndOf="@+id/login_name"
-        android:layout_toRightOf="@+id/login_name"
-        android:text="Login" />
+        android:text="Login"
+        android:layout_below="@+id/login_password"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:id="@+id/login_name"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/login_button"
-        android:layout_alignBottom="@+id/login_button"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:ems="10"
         android:hint="Login Name"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:layout_below="@+id/debugText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:id="@+id/login_password"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/login_button"
         android:ems="10"
         android:hint="Password"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:layout_below="@+id/debugText"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="44dp" />
 
     <Button
         android:id="@+id/button_start_activity"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="News Anzeigen"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="32dp"
-        android:text="Start activity" />
+        android:layout_alignParentStart="true" />
 
     <Button
-        android:id="@+id/notification"
-        android:layout_width="wrap_content"
+        android:id="@+id/news_button"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button_start_activity"
+        android:text="Show notifications"
+        android:layout_below="@+id/login_button"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:text="Show notifications" />
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

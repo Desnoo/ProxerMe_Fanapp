@@ -9,7 +9,7 @@ import com.squareup.otto.Subscribe;
 
 import www.luneyco.com.proxertestapp.R;
 import www.luneyco.com.proxertestapp.events.FragmentChangeEvent;
-import www.luneyco.com.proxertestapp.view.fragment.NewsActivityFragment;
+import www.luneyco.com.proxertestapp.view.fragment.NewsFragment;
 import www.luneyco.com.proxertestapp.utils.provider.BusProvider;
 import www.luneyco.com.proxertestapp.utils.FragmentManager;
 
@@ -23,7 +23,7 @@ public class NewsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
-        FragmentManager.replaceFragment(this, NewsActivityFragment.newInstance(), true);
+        FragmentManager.replaceFragment(this, NewsFragment.newInstance(), true);
     }
 
 

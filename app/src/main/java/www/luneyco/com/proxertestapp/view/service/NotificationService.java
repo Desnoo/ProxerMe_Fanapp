@@ -1,34 +1,38 @@
 package www.luneyco.com.proxertestapp.view.service;
 
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationManagerCompat;
-import android.support.v4.app.TaskStackBuilder;
-import android.support.v7.app.NotificationCompat;
+import android.support.annotation.UiThread;
 import android.util.Log;
+
+import java.util.Calendar;
+import java.util.List;
 
 import io.realm.Realm;
 import www.luneyco.com.proxertestapp.R;
 import www.luneyco.com.proxertestapp.config.Preferences;
+import www.luneyco.com.proxertestapp.middleware.network.modelparser.IListResponse;
 import www.luneyco.com.proxertestapp.middleware.network.modelparser.INotificationResponseParserListener;
 import www.luneyco.com.proxertestapp.middleware.network.modelparser.IResponse;
-import www.luneyco.com.proxertestapp.middleware.network.modelparser.LoginResponseParser;
+import www.luneyco.com.proxertestapp.middleware.network.modelparser.NewsResponseParser;
 import www.luneyco.com.proxertestapp.middleware.network.modelparser.NotificationResponseParser;
 import www.luneyco.com.proxertestapp.model.Login;
-import www.luneyco.com.proxertestapp.model.LoginState;
 import www.luneyco.com.proxertestapp.model.LoginStateAccessor;
+import www.luneyco.com.proxertestapp.model.News;
 import www.luneyco.com.proxertestapp.model.Notification;
+import www.luneyco.com.proxertestapp.model.Test;
+import www.luneyco.com.proxertestapp.utils.NotificationUtils;
 import www.luneyco.com.proxertestapp.view.activity.NewsActivity;
 
 /**
  * Activity that handle notifications.
  * Created by TS on 30.08.2015.
  */
-public class NotificationService extends Service implements INotificationResponseParserListener, IResponse<Login> {
+public class NotificationService extends Service implements INotificationResponseParserListener, IResponse<Login>,IListResponse<News> {
 
+    private long mNewsCount = 0L;
 
     @Nullable
     @Override
@@ -38,6 +42,29 @@ public class NotificationService extends Service implements INotificationRespons
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+      /*  NotificationUtils.createNotification(this, 2, "Test test", "dadaijfd dsf \n" +
+                " neue zeile\n" +
+                " neue zeile\n" +
+                " neue zeile\n" +
+                " neue zeile\n" +
+                " neue zeile", NewsActivity.class, R.mipmap.notification);
+*/
+
+        // executes everytime the service is started
+        Realm realm = Realm.getInstance(this);
+        mNewsCount = realm.where(News.class).count();
+        NewsResponseParser newsResponseParser = new NewsResponseParser(this, this);
+        newsResponseParser.DoRequest(0);
+
+        long count = realm.where(Test.class).count();
+        Test test = new Test();
+        test.setmId((int) count);
+        test.setmCreationTimeStamp(Calendar.getInstance().getTimeInMillis());
+
+        realm.beginTransaction();
+        realm.copyToRealm(test);
+        realm.commitTransaction();
+
         return START_NOT_STICKY;
     }
 
@@ -46,46 +73,21 @@ public class NotificationService extends Service implements INotificationRespons
         super.onCreate();
         Log.d(NotificationService.class.getName(), "On Create of service.");
 
-        LoginResponseParser loginResponseParser = new LoginResponseParser(this, this);
-        loginResponseParser.Login("", "");
-    }
-
-    /**
-     * Create a new notification.
-     * @param _NotificationId the id of the notification.
-     * @param _Title the title of the notification.
-     * @param _Text the text of the notification.
-     * @param _Clazz the class that should be loaded.
-     */
-    private void createNotification(int _NotificationId, CharSequence _Title, CharSequence _Text, Class _Clazz) {
-        Intent targetIntent = new Intent(this, _Clazz);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(_Clazz);
-        stackBuilder.addNextIntent(targetIntent);
-        PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        android.app.Notification notification = builder.setSmallIcon(R.mipmap.no_image)
-                .setContentTitle(_Title)
-                .setContentText(_Text)
-                .setContentIntent(pendingIntent)
-                .build();
-        notification.flags = android.app.Notification.FLAG_AUTO_CANCEL | android.app.Notification.FLAG_SHOW_LIGHTS;
-        notification.ledARGB = 0x0000FFFF;
-        NotificationManagerCompat.from(this).notify(_NotificationId, notification);
+       // LoginResponseParser loginResponseParser = new LoginResponseParser(this, this);
+       // loginResponseParser.Login("", "");
     }
 
 
     @Override
     public void onResponse(Notification _Notification) {
-        createNotification(Preferences.NOTIFICATION_NEWS_ID, "Neue ungelesene News!", _Notification.getUnreadNews() + " neue News", NewsActivity.class);
+        NotificationUtils.createNotification(this, Preferences.NOTIFICATION_NEWS_ID, "Neue ungelesene News!", _Notification.getUnreadNews() + " neue News", NewsActivity.class, R.mipmap.notification);
 
         if (_Notification.isSuccessful()) {
             if (_Notification.getUnreadNews() > 0) {
-                createNotification(Preferences.NOTIFICATION_NEWS_ID, "Neue ungelesene News!", _Notification.getUnreadNews() + " neue News", NewsActivity.class);
+                NotificationUtils.createNotification(this, Preferences.NOTIFICATION_NEWS_ID, "Neue ungelesene News!", _Notification.getUnreadNews() + " neue News", NewsActivity.class, R.mipmap.notification);
             }
             if (_Notification.getOther() > 0) {
-                createNotification(Preferences.NOTIFICATION_NEWS_ID, "Neue Animes aus Watchliste!", _Notification.getOther() + " neue News", NewsActivity.class);
+                NotificationUtils.createNotification(this, Preferences.NOTIFICATION_NEWS_ID, "Neue Animes aus Watchliste!", _Notification.getOther() + " neue News", NewsActivity.class, R.mipmap.notification);
             }
         }
     }
@@ -98,7 +100,30 @@ public class NotificationService extends Service implements INotificationRespons
     }
 
     @Override
-    public void onErrorResponse() {
+    public void onResponse(List<News> _Ret) {
+        Realm realm = Realm.getInstance(this);
 
+        String unreadNews = "";
+        long newestNewsId = realm.where(News.class).maximumInt("mId");
+
+        realm.beginTransaction();
+        for(News news : _Ret){
+            if(news.getmId() > newestNewsId){
+                realm.copyToRealmOrUpdate(news);
+                unreadNews += news.getmTitle() + "\n";
+            }
+        }
+        realm.commitTransaction();
+
+        long newNewsCount = realm.where(News.class).count();
+        int overallNewNews = (int)(newNewsCount - mNewsCount);
+
+        if(overallNewNews > 0) {
+            NotificationUtils.createNotification(this, Preferences.NOTIFICATION_NEWS_ID, overallNewNews + " neue News", unreadNews, NewsActivity.class, R.mipmap.notification);
+        }
+    }
+
+    @Override
+    public void onErrorResponse() {
     }
 }

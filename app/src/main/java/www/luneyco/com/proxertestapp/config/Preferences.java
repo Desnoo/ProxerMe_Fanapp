@@ -8,6 +8,7 @@ public class Preferences {
 
     public static final int NOTIFICATION_NEWS_ID = 0;
 
+    public static final String PREF_ENABLE_NEWS_NOTIFICATION = "prefKeyNotificationNews";
     public static final String UPDATE_RATE = "prefKeyNotificationCheckRate";
     public static final int MIN_UPDATE_RATE = 1;
     public static final int MAX_UPDATE_RATE = 1440;

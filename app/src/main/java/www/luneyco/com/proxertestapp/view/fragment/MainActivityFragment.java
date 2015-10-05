@@ -14,29 +14,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import www.luneyco.com.proxertestapp.R;
-import www.luneyco.com.proxertestapp.config.NetworkRequestUrls;
 import www.luneyco.com.proxertestapp.config.Preferences;
-import www.luneyco.com.proxertestapp.middleware.network.modelparser.IListResponse;
 import www.luneyco.com.proxertestapp.middleware.network.modelparser.IResponse;
 import www.luneyco.com.proxertestapp.middleware.network.modelparser.LoginResponseParser;
 import www.luneyco.com.proxertestapp.model.Login;
-import www.luneyco.com.proxertestapp.request.general.GsonAuthRequest;
 import www.luneyco.com.proxertestapp.view.activity.NewsActivity;
 import www.luneyco.com.proxertestapp.middleware.network.modelparser.INotificationResponseParserListener;
 import www.luneyco.com.proxertestapp.middleware.network.modelparser.NotificationResponseParser;
@@ -87,14 +69,14 @@ public class MainActivityFragment extends Fragment implements INotificationRespo
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         mLoginButton = (Button) view.findViewById(R.id.login_button);
-        mShowNotificationsButton = (Button) view.findViewById(R.id.notification);
+        mShowNotificationsButton = (Button) view.findViewById(R.id.news_button);
         mStartTestListActivityButton = (Button) view.findViewById(R.id.button_start_activity);
         mDebugTextView = (TextView) view.findViewById(R.id.debugText);
         mLoginName = (EditText) view.findViewById(R.id.login_name);
         mPassword = (EditText) view.findViewById(R.id.login_password);
         SharedPreferences prefs = mContext.getSharedPreferences(Preferences.LoginPreferences, Context.MODE_PRIVATE);
         mLoginName.setText(prefs.getString(Preferences.Login.LOGIN_NAME, ""));
-        mPassword.setText( prefs.getString(Preferences.Login.LOGIN_PASSWORD, ""));
+        mPassword.setText(prefs.getString(Preferences.Login.LOGIN_PASSWORD, ""));
         return view;
     }
 
@@ -128,7 +110,7 @@ public class MainActivityFragment extends Fragment implements INotificationRespo
                         .commit();
 
                 LoginResponseParser loginResponseParser = new LoginResponseParser(MainActivityFragment.this, mContext);
-                if(loginResponseParser.Login(mLoginName.getText().toString(),mPassword.getText().toString() )){
+                if(loginResponseParser.Login(mLoginName.getText().toString(),mPassword.getText().toString())){
                     Toast.makeText(mContext, "Bereits eingeloggt!", Toast.LENGTH_LONG).show();
                 }
             }

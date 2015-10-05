@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import www.luneyco.com.proxertestapp.config.Preferences;
  */
 public class NumberPickerPreference extends DialogPreference {
 
+    private static final String LOG_TAG = NumberPickerPreference.class.getName();
     // at max 1 day/1440 minutes
     public static final int MAX_VALUE = Preferences.MAX_UPDATE_RATE;
     // at min 5 minutes.
@@ -59,6 +61,7 @@ public class NumberPickerPreference extends DialogPreference {
 
     @Override
     protected void onDialogClosed(boolean _PositiveResult) {
+        m_NumberPicker.clearFocus();
         if (_PositiveResult) {
             int newValue = m_NumberPicker.getValue();
             if (callChangeListener(newValue)) {

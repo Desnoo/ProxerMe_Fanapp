@@ -3,6 +3,7 @@ package www.luneyco.com.proxertestapp.utils;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 
 import www.luneyco.com.proxertestapp.R;
 
@@ -19,6 +20,7 @@ public class FragmentManager {
      * @param _AddToBackStack indicates if this fragment change should be added to backstack.
      */
     public static void replaceFragment(Activity _Activity, Fragment _Fragment, boolean _AddToBackStack) {
+
         FragmentTransaction transaction = _Activity.getFragmentManager().beginTransaction().replace(R.id.fragment, _Fragment);
         if(_AddToBackStack){
             transaction = transaction.addToBackStack(null);
