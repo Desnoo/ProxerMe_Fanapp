@@ -15,12 +15,11 @@ import www.luneyco.com.proxertestapp.utils.FragmentManager;
  * Activity that holds all fragments for settings/preferences.
  * Created by TS on 30.08.2015.
  */
-public class PreferencesActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class PreferencesActivity extends BaseDrawerActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
     protected void onCreate(Bundle _SavedInstanceState) {
         super.onCreate(_SavedInstanceState);
-        setContentView(R.layout.activity_base);
         FragmentManager.replaceFragment(this, new MainPreferencesFragment(), false);
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
     }

@@ -1,50 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     package="www.luneyco.com.proxertestapp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:permission="android.permission.RECEIVE_BOOT_COMPLETED"
+    >
 
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".MainApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|layoutDirection"
+        android:icon="@mipmap/notification"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <service android:enabled="true" android:name=".view.service.NotificationService">
-        </service>
+        <service
+            android:name=".view.service.NotificationService"
+            android:enabled="true"/>
+
         <activity
             android:name=".view.activity.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".view.activity.PreferencesActivity"
-            android:label="preferences">
+            android:label="preferences"
+            android:parentActivityName=".view.activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".view.activity.AnimeActivity"
+            android:label="@string/abc_anime"
+            android:parentActivityName=".view.activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.activity.MainActivity" />
         </activity>
         <activity
             android:name=".List_test"
-            android:label="@string/title_activity_list_test">
-        </activity>
+            android:label="@string/title_activity_list_test"></activity>
         <activity
             android:name=".view.activity.NewsActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|layoutDirection"
             android:label="@string/title_activity_news"
             android:parentActivityName=".view.activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.activity.MainActivity"/>
+                android:value=".view.activity.MainActivity" />
         </activity>
 
-        <receiver
-            android:name=".BootReceiver"
-            android:enabled="false">
+        <receiver android:name=".BootReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
     </application>

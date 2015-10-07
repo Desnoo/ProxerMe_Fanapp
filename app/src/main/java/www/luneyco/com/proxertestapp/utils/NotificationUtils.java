@@ -8,6 +8,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.NotificationCompat;
 
 import www.luneyco.com.proxertestapp.R;
+import www.luneyco.com.proxertestapp.view.activity.MainActivity;
 
 /**
  * Utils for notifications. Used to easily create a notification.
@@ -27,7 +28,7 @@ public class NotificationUtils {
     public static void createNotification(Context _Context, int _NotificationId, CharSequence _Title, CharSequence _Text, Class _Clazz, int _Icon) {
         Intent targetIntent = new Intent(_Context, _Clazz);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(_Context);
-        stackBuilder.addParentStack(_Clazz);
+        stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(targetIntent);
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 

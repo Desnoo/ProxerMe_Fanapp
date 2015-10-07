@@ -32,7 +32,7 @@ import www.luneyco.com.proxertestapp.view.activity.NewsActivity;
  */
 public class NotificationService extends Service implements INotificationResponseParserListener, IResponse<Login>,IListResponse<News> {
 
-    private long mNewsCount = 0L;
+    private static long mNewsCount = 0L;
 
     @Nullable
     @Override
@@ -42,13 +42,6 @@ public class NotificationService extends Service implements INotificationRespons
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-      /*  NotificationUtils.createNotification(this, 2, "Test test", "dadaijfd dsf \n" +
-                " neue zeile\n" +
-                " neue zeile\n" +
-                " neue zeile\n" +
-                " neue zeile\n" +
-                " neue zeile", NewsActivity.class, R.mipmap.notification);
-*/
 
         // executes everytime the service is started
         Realm realm = Realm.getInstance(this);

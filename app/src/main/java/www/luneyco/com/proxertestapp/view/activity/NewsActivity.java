@@ -1,7 +1,11 @@
 package www.luneyco.com.proxertestapp.view.activity;
 
+import android.content.res.Configuration;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -9,6 +13,7 @@ import com.squareup.otto.Subscribe;
 
 import www.luneyco.com.proxertestapp.R;
 import www.luneyco.com.proxertestapp.events.FragmentChangeEvent;
+import www.luneyco.com.proxertestapp.utils.Utils;
 import www.luneyco.com.proxertestapp.view.fragment.NewsFragment;
 import www.luneyco.com.proxertestapp.utils.provider.BusProvider;
 import www.luneyco.com.proxertestapp.utils.FragmentManager;
@@ -16,14 +21,20 @@ import www.luneyco.com.proxertestapp.utils.FragmentManager;
 /**
  * Activity that handles all news related things.
  */
-public class NewsActivity extends AppCompatActivity {
+public class NewsActivity extends BaseDrawerActivity {
 
+    private static final String LOG_TAG = NewsActivity.class.getName();
+    public static final String ORIENTATION_CHANGE = "orientation_change";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base);
-        FragmentManager.replaceFragment(this, NewsFragment.newInstance(), true);
+        Log.i(LOG_TAG, "OnCreate");
+
+        /**
+         * first time the onCreate was called. So we start the {@link NewsFragment} from here
+         */
+        FragmentManager.replaceFragment(this, NewsFragment.newInstance(true), true);
     }
 
 
@@ -42,6 +53,16 @@ public class NewsActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+    }
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Log.i(LOG_TAG, "Configuration changed!");
+        // do not load any new news after rotation and dont add it to the backstack
+        //FragmentManager.replaceFragment(this, NewsFragment.newInstance(false), false);
+
     }
 
     @Override

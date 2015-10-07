@@ -20,13 +20,12 @@ import www.luneyco.com.proxertestapp.utils.FragmentManager;
 import www.luneyco.com.proxertestapp.view.service.NotificationService;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseDrawerActivity {
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base);
         FragmentManager.replaceFragment(this, MainActivityFragment.newInstance(), true);
 
     }
@@ -54,5 +53,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // on last step go to home screen
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        startActivity(intent);
     }
 }

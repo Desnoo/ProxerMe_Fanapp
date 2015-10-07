@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
 
@@ -36,7 +37,7 @@ public class NewsDetailFragment extends Fragment implements Response.ErrorListen
 
     private Document m_Document;
     private WebView m_WebView;
-    private String m_UrlToLoad;
+    private String mUrlToLoad;
 
     public static Fragment newInstance(String _NewsUrl) {
         android.os.Bundle bundle = new android.os.Bundle();
@@ -53,20 +54,24 @@ public class NewsDetailFragment extends Fragment implements Response.ErrorListen
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             android.os.Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_news_details, container, false);
+    public View onCreateView(LayoutInflater _Inflater, ViewGroup _Container,
+                             android.os.Bundle _SavedInstanceState) {
+        View view = _Inflater.inflate(R.layout.fragment_news_details, _Container, false);
         m_WebView = (WebView) view.findViewById(R.id.webView);
-        m_WebView.loadUrl(m_UrlToLoad);
+        WebSettings settings = m_WebView.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setBuiltInZoomControls(true);
+        settings.setSupportZoom(true);
+        m_WebView.loadUrl(mUrlToLoad);
         return view;
     }
 
     @Override
     public void onCreate(android.os.Bundle _SavedInstanceState) {
         super.onCreate(_SavedInstanceState);
-        m_UrlToLoad = getArguments().getString(Bundle.NEWS_URL);
+        mUrlToLoad = getArguments().getString(Bundle.NEWS_URL);
         //RequestQueue queue = Volley.newRequestQueue(mContext);
-        // queue.add(new StringRequest(StringRequest.Method.GET, m_UrlToLoad, this, this));
+        // queue.add(new StringRequest(StringRequest.Method.GET, mUrlToLoad, this, this));
 
     }
 

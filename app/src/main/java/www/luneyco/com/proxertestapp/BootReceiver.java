@@ -19,8 +19,14 @@ public class BootReceiver extends BroadcastReceiver {
     public void onReceive(Context _Context, Intent _Intent) {
         if(_Intent.getAction().equals("android.intent.action.BOOT_COMPLETED")){
             // set the alarm.
-            int updateRate = PreferenceManager.getDefaultSharedPreferences(_Context).getInt(Preferences.UPDATE_RATE, Preferences.MIN_UPDATE_RATE);
-            //AlertHelper.startNewsAlarmManager(_Context, updateRate);
+            boolean startNewsService = PreferenceManager.getDefaultSharedPreferences(_Context).getBoolean(Preferences.PREF_ENABLE_NEWS_NOTIFICATION, false);
+
+            // only start if it is enabled!
+            if(startNewsService) {
+                int updateRate = PreferenceManager.getDefaultSharedPreferences(_Context).getInt(Preferences.UPDATE_RATE, Preferences.MIN_UPDATE_RATE);
+                AlertHelper alertHelper = new AlertHelper();
+                alertHelper.startNewsAlarmManager(_Context, updateRate);
+            }
         }
     }
 }

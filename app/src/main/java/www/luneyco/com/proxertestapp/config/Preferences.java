@@ -20,4 +20,5 @@ public class Preferences {
         public static final String LOGIN_PASSWORD = "prefLoginPassword";
     }
 
+    public static final String PREF_KEY_LICENSE = "prefKeyLicense";
 }

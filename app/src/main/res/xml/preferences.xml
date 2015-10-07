@@ -26,4 +26,14 @@
             android:dependency="prefKeyNotificationNews"
             />
     </PreferenceCategory>
+    <PreferenceCategory
+        android:key="prefKeyLicenses"
+        android:title="@string/abc_license"
+        >
+        <Preference
+            android:key="prefKeyLicense"
+            android:summary="@string/abc_license_sum_up"
+            android:title="@string/abc_license_title"
+            />
+    </PreferenceCategory>
 </PreferenceScreen>

@@ -22,7 +22,7 @@ public class MainApplication extends Application {
 
     public static String LOG_TAG = MainApplication.class.getName();
     private AlertHelper m_AlertHelper;
-    private        CookieManager   m_CookieManager;
+    private CookieManager m_CookieManager;
     private static MainApplication m_MainApplication;
 
     public static MainApplication getInstance() {
@@ -42,11 +42,11 @@ public class MainApplication extends Application {
     /**
      * Starts a news service if the preference ENABLE_NEWS_NOTIFICATION is true.
      */
-    public void startNewsService(){
-        SharedPreferences preferenceManager =  PreferenceManager.getDefaultSharedPreferences(this);
+    public void startNewsService() {
+        SharedPreferences preferenceManager = PreferenceManager.getDefaultSharedPreferences(this);
         boolean startNewsService = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Preferences.PREF_ENABLE_NEWS_NOTIFICATION, false);
         stopNewsService();
-        if(startNewsService) {
+        if (startNewsService) {
             int updateRate = (int) preferenceManager.getInt(Preferences.UPDATE_RATE, 30);
             m_AlertHelper.startNewsAlarmManager(this, PreferenceManager.getDefaultSharedPreferences(this).getInt(Preferences.UPDATE_RATE, Preferences.MIN_UPDATE_RATE));
             Log.i(LOG_TAG, "Start new news service. Starts every " + updateRate + " minutes");
@@ -56,7 +56,7 @@ public class MainApplication extends Application {
     /**
      * Stops the news service.
      */
-    public void stopNewsService(){
+    public void stopNewsService() {
         m_AlertHelper.stopNewsAlarmManager(this);
         Log.i(LOG_TAG, "Stop news service.");
     }

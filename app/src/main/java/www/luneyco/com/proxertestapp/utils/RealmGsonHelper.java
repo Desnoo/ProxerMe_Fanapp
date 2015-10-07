@@ -9,8 +9,12 @@ import com.google.gson.GsonBuilder;
 
 import io.realm.RealmObject;
 import www.luneyco.com.proxertestapp.model.Category;
+import www.luneyco.com.proxertestapp.model.Language;
 import www.luneyco.com.proxertestapp.model.News;
 import www.luneyco.com.proxertestapp.model.User;
+import www.luneyco.com.proxertestapp.model.anime.Anime;
+import www.luneyco.com.proxertestapp.model.anime.Episode;
+import www.luneyco.com.proxertestapp.model.anime.StreamingType;
 import www.luneyco.com.proxertestapp.model.serializer.CategorySerializer;
 import www.luneyco.com.proxertestapp.model.serializer.NewsSerializer;
 import www.luneyco.com.proxertestapp.model.serializer.UserSerializer;
@@ -47,7 +51,9 @@ public class RealmGsonHelper {
         // This is used, for instance, when serializing a RealmQuery.
         gsonBuilder.registerTypeAdapter(Category.class, new CategorySerializer())
                 .registerTypeAdapter(News.class, new NewsSerializer())
-                .registerTypeAdapter(User.class, new UserSerializer());
+                .registerTypeAdapter(User.class, new UserSerializer())
+                .registerTypeAdapter(Anime.class, new Anime())
+                .registerTypeAdapter(Episode.class, new Episode());
 
         // Register Type Adapters for serializing RealmObjects when accessed indirectly.
         // Realm proxy objects are registered for when you want to serialize an unmanaged RealmList,

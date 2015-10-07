@@ -25,3 +25,8 @@
     @com.squareup.otto.Produce public *;
 }
 -dontwarn com.squareup.okhttp.**
+# about libs
+-keep class .R
+-keep class **.R$* {
+    <fields>;
+}

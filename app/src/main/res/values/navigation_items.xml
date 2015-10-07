@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="navigation_items">
+        <item>@string/abc_navigation_news</item>
+        <item>@string/abc_navigation_anime</item>
+        <item>@string/abc_navigation_settings</item>
+        <item>@string/abc_navigation_donation</item>
+    </string-array>
+    <string name="abc_navigation_donation">Spenden</string>
+</resources>

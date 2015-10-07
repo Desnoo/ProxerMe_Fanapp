@@ -7,10 +7,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,24 +41,40 @@ import www.luneyco.com.proxertestapp.view.adapter.RealmNewsAdapter;
 /**
  * A fragment that holds the news related contents.
  */
-@SuppressWarnings("deprecation")
 public class NewsFragment extends Fragment implements IListResponse<News>, INotificationResponseParserListener, SwipeRefreshLayout.OnRefreshListener {
 
+    public static final String KEY_RECYCLER_VIEW_STATE = "key_recycler_view_state";
+    public static final String KEY_LAST_POSITION = "key_last_position";
+    private static String LOG_TAG = NewsFragment.class.getName();
     private static final long HOUR = 360000; // 60*60*1000
     private static final long MINUTE = 60000; // 60*1000
+    public static final String LOAD_NEWS = "load_news";
 
     private Context mContext;
     private RecyclerView mListView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private NewsListAdapter mListAdapter;
+    private LinearLayoutManager mLinearLayoutManager;
 
     private NewsResponseParser m_NewsResponseParser;
+    /**
+     * Indicates if at the start of the application the news should be reloaded from web.
+     */
+    private boolean mLoadNews = true;
 
     public NewsFragment() {
     }
 
-    public static Fragment newInstance() {
+    /**
+     * Fetch a new instance of {@link NewsFragment}.
+     * @param _LoadNews true if news should be loaded from web on startup, false if not.
+     * @return the new fragment with the bundle associated.
+     */
+    public static Fragment newInstance(boolean _LoadNews) {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(LOAD_NEWS, _LoadNews);
         Fragment fragment = new NewsFragment();
+        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -85,11 +103,24 @@ public class NewsFragment extends Fragment implements IListResponse<News>, INoti
 
     }
 
+
+    /**
+     * Used to attach the context to this activity. Do all the related things in this instead of in onAttach.
+     * @param _Context the context where fragment was attached.
+     */
     private void onAttachToContext(Context _Context) {
         mContext = _Context;
         m_NewsResponseParser = new NewsResponseParser(this, mContext);
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mLoadNews = getArguments().getBoolean(LOAD_NEWS, true);
+
+        Log.i(LOG_TAG, "on Create was called with mLoadNews= " + mLoadNews);
+        mListAdapter = new NewsListAdapter(mContext, R.layout.list_adapter_news_preview);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -99,7 +130,8 @@ public class NewsFragment extends Fragment implements IListResponse<News>, INoti
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mListView.setAdapter(mListAdapter);
-        mListView.setLayoutManager(new LinearLayoutManager(mContext));
+        mLinearLayoutManager = new LinearLayoutManager(mContext);
+        mListView.setLayoutManager(mLinearLayoutManager);
         mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
@@ -120,33 +152,53 @@ public class NewsFragment extends Fragment implements IListResponse<News>, INoti
             }
 
         });
+
+        if(savedInstanceState != null) {
+            Parcelable state = savedInstanceState.getParcelable(KEY_RECYCLER_VIEW_STATE);
+            int scrollToPos = savedInstanceState.getInt(KEY_LAST_POSITION, 0);
+            mListView.getLayoutManager().onRestoreInstanceState(state);
+            mListView.scrollToPosition(scrollToPos);
+        } else {
+            Realm realm = Realm.getInstance(mContext);
+            RealmResults<News> news = realm.where(News.class).findAllSorted("mId", false);
+            RealmNewsAdapter newsAdapter = new RealmNewsAdapter(mContext, news, true);
+            mListAdapter.setRealmAdapter(newsAdapter);
+        }
         return view;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mListAdapter = new NewsListAdapter(mContext, R.layout.list_adapter_news_preview);
+    public void onStart() {
+        super.onStart();
+
+        if(mLoadNews) {
+            triggerLoadNews();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Realm realm = Realm.getInstance(mContext);
-        RealmResults<News> news = realm.where(News.class).findAllSorted("mId", false);
-
-        RealmNewsAdapter newsAdapter = new RealmNewsAdapter(mContext, news, true);
-        mListAdapter.setRealmAdapter(newsAdapter);
         BusProvider.getInstance().register(this);
-        RequestQueue queue = Volley.newRequestQueue(mContext);
-        triggerLoadNews();
+
     }
+
+
 
     @Override
     public void onPause() {
         super.onPause();
         BusProvider.getInstance().unregister(this);
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(KEY_RECYCLER_VIEW_STATE, mListView.getLayoutManager().onSaveInstanceState());
+        outState.putInt(KEY_LAST_POSITION,((LinearLayoutManager) mListView.getLayoutManager()).findFirstCompletelyVisibleItemPosition());
+    }
+
+
 
     @Override
     public void onResponse(List<News> _Ret) {
@@ -161,6 +213,7 @@ public class NewsFragment extends Fragment implements IListResponse<News>, INoti
 
     @Override
     public void onErrorResponse() {
+        mSwipeRefreshLayout.setRefreshing(false);
         Toast.makeText(mContext, "News konnten nicht aktualisiert werden", Toast.LENGTH_LONG).show();
     }
 

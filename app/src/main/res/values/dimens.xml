@@ -6,4 +6,5 @@
     <dimen name="list_item_image_with_text">100dp</dimen>
     <dimen name="image_margin">8dp</dimen>
     <dimen name="list_margin_left">8dp</dimen>
+    <dimen name="drawer_width">240dp</dimen>
 </resources>
