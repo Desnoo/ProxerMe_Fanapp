@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/anime_filter"
+        android:icon="@drawable/abc_switch_track_mtrl_alpha"
+        android:title="@string/abc_filter"
+        app:showAsAction="ifRoom">
+        <menu>
+            <group android:id="@+id/filter_lang_group">
+                <item
+                    android:id="@+id/filter_eng"
+                    android:title="@string/abc_filter_eng_sub"
+                    app:showAsAction="ifRoom"/>
+                <item
+                    android:id="@+id/filter_ger"
+                    android:title="@string/abc_filter_ger_sub"
+                    app:showAsAction="ifRoom"/>
+            </group>
+        </menu>
+    </item>
+</menu>

@@ -37,6 +37,7 @@ public class NotificationUtils {
                 .setContentIntent(pendingIntent)
                 .setStyle(new android.support.v4.app.NotificationCompat.BigTextStyle()
                     .setBigContentTitle(_Title)
+                    .setSummaryText(_Title)
                     .bigText(_Text))
                 .build();
         notification.flags = android.app.Notification.FLAG_AUTO_CANCEL | android.app.Notification.FLAG_SHOW_LIGHTS;

@@ -20,4 +20,8 @@
     <string name="abc_license_sum_up">Alle verwendeten Open Source Lizenzen.</string>
     <string name="app_description">Diese App ist eine Fanentwicklung für die ProxerME Community.</string>
     <string name="abc_anime">Anime</string>
+    <string name="abc_play">Wiedergeben</string>
+    <string name="abc_filter">Filter</string>
+    <string name="abc_filter_eng_sub">Eng Sub</string>
+    <string name="abc_filter_ger_sub">Ger Sub</string>
 </resources>

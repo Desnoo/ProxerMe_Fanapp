@@ -7,4 +7,5 @@
     <dimen name="image_margin">8dp</dimen>
     <dimen name="list_margin_left">8dp</dimen>
     <dimen name="drawer_width">240dp</dimen>
+    <dimen name="anime_card_height">72dp</dimen>
 </resources>
