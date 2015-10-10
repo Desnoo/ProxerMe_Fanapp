@@ -1,4 +1,4 @@
-package www.luneyco.com.proxertestapp.request.general;
+package www.luneyco.com.proxertestapp.network.general.request;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;

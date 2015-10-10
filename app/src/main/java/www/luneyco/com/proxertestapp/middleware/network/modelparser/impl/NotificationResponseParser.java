@@ -1,4 +1,4 @@
-package www.luneyco.com.proxertestapp.middleware.network.modelparser;
+package www.luneyco.com.proxertestapp.middleware.network.modelparser.impl;
 
 import android.content.Context;
 
@@ -10,8 +10,10 @@ import com.android.volley.toolbox.Volley;
 import java.util.Date;
 
 import www.luneyco.com.proxertestapp.config.NetworkRequestUrls;
+import www.luneyco.com.proxertestapp.middleware.network.modelparser.IResponse;
 import www.luneyco.com.proxertestapp.model.Notification;
-import www.luneyco.com.proxertestapp.request.general.StringRequest;
+import www.luneyco.com.proxertestapp.network.general.request.StringRequest;
+import www.luneyco.com.proxertestapp.utils.provider.VolleyProvider;
 
 /**
  * Parses the notification request and the resulting response.
@@ -29,44 +31,45 @@ public class NotificationResponseParser implements Response.ErrorListener, Respo
      * Ungelesene News.
      * Sonstige Benachrichtigungen.
      */
-    private static final short ERROR              = 0;
-    private static final short NEW_PN_MSG         = 2;
-    private static final short FRIEND_REQ         = 3;
-    private static final short UNREAD_NEWS        = 4;
+    private static final short ERROR = 0;
+    private static final short NEW_PN_MSG = 2;
+    private static final short FRIEND_REQ = 3;
+    private static final short UNREAD_NEWS = 4;
     private static final short OTHER_NOIFIFCATION = 5;
 
     /**
      * The listener that should receive the parsed info of a response.
      */
-    private INotificationResponseParserListener m_Listener;
+    private IResponse<Notification> m_Listener;
 
     /**
      * Saves the date of last request to prevent to many requests.
      */
     private Date m_LastRequest;
 
-    private StringRequest m_Request;
-    private Context       m_Context;
+    private StringRequest mRequest;
+    private Context mContext;
 
     /**
      * Creates an instance that makes it possible to request the notifications.
      *
-     * @param _Listener the listener that should get the data when the request and response is finished. (use DoRequest to init a new request)
+     * @param _Listener the listener that should get the data when the request and response is finished. (use doRequest to init a new request)
      * @param _Context  the context of the calling activity/fragment.
      */
-    public NotificationResponseParser(INotificationResponseParserListener _Listener, Context _Context) {
+    public NotificationResponseParser(IResponse<Notification> _Listener, Context _Context) {
         m_Listener = _Listener;
-        m_Context = _Context;
+        mContext = _Context;
     }
 
     /**
      * Creates an Request to the server to get the notifications.
      */
-    public void DoRequest() {
+    public void doRequest() {
         m_LastRequest = new Date();
-        RequestQueue queue = Volley.newRequestQueue(m_Context);
-        m_Request = new StringRequest(StringRequest.Method.GET, NetworkRequestUrls.NotificationRequestUrl, this, this);
-        queue.add(m_Request);
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+        mRequest = new StringRequest(StringRequest.Method.GET, NetworkRequestUrls.NotificationRequestUrl, this, this);
+        VolleyProvider.getInstance(mContext).addToRequestQueue(mRequest);
+        queue.add(mRequest);
 
     }
 
@@ -77,7 +80,7 @@ public class NotificationResponseParser implements Response.ErrorListener, Respo
 
     @Override
     public void onResponse(String _Response) {
-        if (! _Response.contains("#")) {
+        if (!_Response.contains("#")) {
             // if no hashtag is in the response string, there has happened an error or api has changed.
             m_Listener.onResponse(Notification.FailedNotification());
             return;
@@ -90,7 +93,7 @@ public class NotificationResponseParser implements Response.ErrorListener, Respo
             // return new notification with information
             Notification notification = new Notification();
             boolean success = Integer.valueOf(vals[ERROR]) == 0;
-            if (! success) {
+            if (!success) {
                 m_Listener.onResponse(Notification.FailedNotification());
                 return;
             }

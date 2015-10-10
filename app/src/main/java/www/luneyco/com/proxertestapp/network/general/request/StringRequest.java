@@ -1,4 +1,4 @@
-package www.luneyco.com.proxertestapp.request.general;
+package www.luneyco.com.proxertestapp.network.general.request;
 
 import android.util.Log;
 
@@ -9,8 +9,6 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * String Request to get String response for a normal request.

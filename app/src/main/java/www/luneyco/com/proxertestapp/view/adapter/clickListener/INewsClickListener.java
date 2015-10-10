@@ -1,4 +1,4 @@
-package www.luneyco.com.proxertestapp.view.adapter;
+package www.luneyco.com.proxertestapp.view.adapter.clickListener;
 
 /**
  * Interface for a click listener event.

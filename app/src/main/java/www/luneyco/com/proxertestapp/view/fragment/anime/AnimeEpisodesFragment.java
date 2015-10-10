@@ -13,10 +13,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -32,10 +30,10 @@ import www.luneyco.com.proxertestapp.R;
 import www.luneyco.com.proxertestapp.model.Language;
 import www.luneyco.com.proxertestapp.model.anime.Anime;
 import www.luneyco.com.proxertestapp.model.anime.Episode;
-import www.luneyco.com.proxertestapp.request.general.StringRequest;
+import www.luneyco.com.proxertestapp.network.general.request.StringRequest;
 import www.luneyco.com.proxertestapp.utils.RealmGsonHelper;
 import www.luneyco.com.proxertestapp.view.adapter.EpisodeListAdapter;
-import www.luneyco.com.proxertestapp.view.adapter.IOnTouchListener;
+import www.luneyco.com.proxertestapp.view.adapter.clickListener.IOnTouchListener;
 
 /**
  * Created by tinos_000 on 07.10.2015.

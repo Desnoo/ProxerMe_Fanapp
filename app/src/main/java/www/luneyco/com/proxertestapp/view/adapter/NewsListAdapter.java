@@ -17,6 +17,7 @@ import www.luneyco.com.proxertestapp.model.News;
 import www.luneyco.com.proxertestapp.utils.NetworkUtils;
 import www.luneyco.com.proxertestapp.utils.provider.BusProvider;
 import www.luneyco.com.proxertestapp.view.adapter.base.RealmRecyclerViewAdapter;
+import www.luneyco.com.proxertestapp.view.adapter.clickListener.INewsClickListener;
 import www.luneyco.com.proxertestapp.view.fragment.NewsDetailFragment;
 
 /**

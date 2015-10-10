@@ -1,4 +1,4 @@
-package www.luneyco.com.proxertestapp.view.adapter;
+package www.luneyco.com.proxertestapp.view.adapter.clickListener;
 
 /**
  * Touchlistener associated with a {@link android.support.v7.widget.RecyclerView} to propagate the item to the parent class.

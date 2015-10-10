@@ -1,7 +1,6 @@
 package www.luneyco.com.proxertestapp;
 
 import android.app.Application;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -12,7 +11,6 @@ import java.net.CookiePolicy;
 
 import www.luneyco.com.proxertestapp.config.Preferences;
 import www.luneyco.com.proxertestapp.utils.AlertHelper;
-import www.luneyco.com.proxertestapp.view.service.NotificationService;
 
 /**
  * The main application class that holds some useful methods and cookies for example.

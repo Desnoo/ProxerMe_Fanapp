@@ -18,8 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.squareup.otto.Subscribe;
 
 import java.util.Calendar;
@@ -31,7 +29,7 @@ import www.luneyco.com.proxertestapp.R;
 import www.luneyco.com.proxertestapp.events.LoadNewsFromWebEvent;
 import www.luneyco.com.proxertestapp.middleware.network.modelparser.IListResponse;
 import www.luneyco.com.proxertestapp.middleware.network.modelparser.INotificationResponseParserListener;
-import www.luneyco.com.proxertestapp.middleware.network.modelparser.NewsResponseParser;
+import www.luneyco.com.proxertestapp.middleware.network.modelparser.impl.NewsResponseParser;
 import www.luneyco.com.proxertestapp.model.News;
 import www.luneyco.com.proxertestapp.model.Notification;
 import www.luneyco.com.proxertestapp.utils.provider.BusProvider;

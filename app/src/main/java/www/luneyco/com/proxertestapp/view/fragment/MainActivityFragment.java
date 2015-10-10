@@ -17,18 +17,17 @@ import android.widget.Toast;
 import www.luneyco.com.proxertestapp.R;
 import www.luneyco.com.proxertestapp.config.Preferences;
 import www.luneyco.com.proxertestapp.middleware.network.modelparser.IResponse;
-import www.luneyco.com.proxertestapp.middleware.network.modelparser.LoginResponseParser;
+import www.luneyco.com.proxertestapp.middleware.network.modelparser.impl.LoginResponseParser;
+import www.luneyco.com.proxertestapp.middleware.network.modelparser.impl.NotificationResponseParser;
 import www.luneyco.com.proxertestapp.model.Login;
-import www.luneyco.com.proxertestapp.view.activity.NewsActivity;
-import www.luneyco.com.proxertestapp.middleware.network.modelparser.INotificationResponseParserListener;
-import www.luneyco.com.proxertestapp.middleware.network.modelparser.NotificationResponseParser;
 import www.luneyco.com.proxertestapp.model.Notification;
+import www.luneyco.com.proxertestapp.view.activity.NewsActivity;
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment implements INotificationResponseParserListener, IResponse<Login> {
+public class MainActivityFragment extends Fragment {
 
     private Button mLoginButton;
     private Button mShowNotificationsButton;
@@ -46,7 +45,7 @@ public class MainActivityFragment extends Fragment implements INotificationRespo
     public MainActivityFragment() {
     }
 
-    public static Fragment newInstance(){
+    public static Fragment newInstance() {
         Fragment fragment = new MainActivityFragment();
         return fragment;
     }
@@ -95,8 +94,8 @@ public class MainActivityFragment extends Fragment implements INotificationRespo
         mShowNotificationsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NotificationResponseParser notificationResponseParser = new NotificationResponseParser(MainActivityFragment.this, mContext);
-                notificationResponseParser.DoRequest();
+                NotificationResponseParser notificationResponseParser = new NotificationResponseParser(mNotificationResponse, mContext);
+                notificationResponseParser.doRequest();
             }
         });
 
@@ -109,8 +108,8 @@ public class MainActivityFragment extends Fragment implements INotificationRespo
                         .putString(Preferences.Login.LOGIN_PASSWORD, mPassword.getText().toString())
                         .commit();
 
-                LoginResponseParser loginResponseParser = new LoginResponseParser(MainActivityFragment.this, mContext);
-                if(loginResponseParser.Login(mLoginName.getText().toString(),mPassword.getText().toString())){
+                LoginResponseParser loginResponseParser = new LoginResponseParser(mLoginResponse, mContext);
+                if (loginResponseParser.Login(mLoginName.getText().toString(), mPassword.getText().toString())) {
                     Toast.makeText(mContext, "Bereits eingeloggt!", Toast.LENGTH_LONG).show();
                 }
             }
@@ -125,18 +124,64 @@ public class MainActivityFragment extends Fragment implements INotificationRespo
         mLoginButton.setOnClickListener(null);
     }
 
-    @Override
+
+    /**
+     * Response handler for {@link Notification}s.
+     *
+     * @param _Notification the notification.
+     */
     public void onResponse(Notification _Notification) {
         mDebugTextView.setText(_Notification.toString());
     }
 
-    @Override
+    /**
+     * The response handler for {@link Login}.
+     *
+     * @param _Ret the current Login state.
+     */
     public void onResponse(Login _Ret) {
 
     }
 
-    @Override
+    /**
+     * General handler for errors.
+     */
     public void onErrorResponse() {
 
     }
+
+
+    //region Anonynmous inner classes for parser callbacks.
+
+    /**
+     * inner anonymus class for {@link Notification}s callbacks.
+     */
+    private IResponse<Notification> mNotificationResponse = new IResponse<Notification>() {
+        @Override
+        public void onResponse(Notification _Ret) {
+            MainActivityFragment.this.onResponse(_Ret);
+        }
+
+        @Override
+        public void onErrorResponse() {
+            MainActivityFragment.this.onErrorResponse();
+        }
+    };
+
+    /**
+     * inner anonymus class for {@link Login} callback.
+     */
+    private IResponse<Login> mLoginResponse = new IResponse<Login>() {
+        @Override
+        public void onResponse(Login _Ret) {
+            MainActivityFragment.this.onResponse(_Ret);
+        }
+
+        @Override
+        public void onErrorResponse() {
+            MainActivityFragment.this.onErrorResponse();
+        }
+    };
+
+    //endregion
 }

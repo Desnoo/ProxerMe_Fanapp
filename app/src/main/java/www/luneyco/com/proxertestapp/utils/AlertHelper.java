@@ -7,7 +7,7 @@ import android.content.Intent;
 
 import java.util.Calendar;
 
-import www.luneyco.com.proxertestapp.view.service.NotificationService;
+import www.luneyco.com.proxertestapp.service.NotificationService;
 
 /**
  * Helper to create

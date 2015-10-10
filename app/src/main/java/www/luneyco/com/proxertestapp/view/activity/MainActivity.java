@@ -2,22 +2,12 @@ package www.luneyco.com.proxertestapp.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
-
-import www.luneyco.com.proxertestapp.PersistentCookieStore;
 import www.luneyco.com.proxertestapp.R;
-import www.luneyco.com.proxertestapp.config.Preferences;
 import www.luneyco.com.proxertestapp.view.fragment.MainActivityFragment;
-import www.luneyco.com.proxertestapp.utils.AlertHelper;
 import www.luneyco.com.proxertestapp.utils.FragmentManager;
-import www.luneyco.com.proxertestapp.view.service.NotificationService;
 
 
 public class MainActivity extends BaseDrawerActivity {
